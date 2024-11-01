@@ -91,7 +91,7 @@ class BarangResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('gambar')
+                Tables\Columns\ImageColumn::make('gambar')
                 ->searchable(),
                 Tables\Columns\TextColumn::make('kode')
                     ->label('Nomor Barang')
