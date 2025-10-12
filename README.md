@@ -53,3 +53,38 @@ Berikut langkah-langkah untuk menjalankan aplikasi ini di lingkungan lokal:
     ```bash
     composer install
     php artisan install```
+
+## Docker Development
+
+Langkah cepat untuk menjalankan aplikasi menggunakan Docker (development):
+
+1. Salin environment khusus Docker:
+
+```bash
+cp .env.docker .env
+```
+
+2. Jalankan docker-compose:
+
+```bash
+docker compose up -d --build
+```
+
+3. Setelah kontainer berjalan, jalankan perintah yang diperlukan dari dalam kontainer app:
+
+```bash
+# jalankan composer (hanya jika belum ada vendor)
+docker compose exec app composer install
+
+# generate app key
+docker compose exec app php artisan key:generate
+
+# jalankan migrasi (opsional, pastikan DB sudah siap)
+docker compose exec app php artisan migrate --seed
+```
+
+4. Akses aplikasi di http://localhost:8080 dan Adminer (DB) di http://localhost:8081
+
+Catatan:
+- File aplikasi akan di-mount ke dalam kontainer sehingga perubahan kode langsung terlihat.
+- Jika butuh akses shell ke kontainer app: `docker compose exec app bash`.
