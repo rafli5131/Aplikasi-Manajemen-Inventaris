@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Inventory System')
             ->favicon(asset('images/icon.png'))
             ->sidebarCollapsibleOnDesktop()
-            ->brandLogo(fn () => view('filament.logo'))
+            ->brandLogo(fn() => view('filament.logo'))
             ->colors([
                 'primary' => Color::Amber,
                 'danger' => Color::Red,
@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->databaseNotifications()
             ->authMiddleware([
                 Authenticate::class,
             ]);

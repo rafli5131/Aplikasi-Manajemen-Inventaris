@@ -21,7 +21,8 @@
     width: 100%;
   }
 
-  td, th {
+  td,
+  th {
     padding: 10px;
     border: 1px solid black;
     text-align: left;
@@ -37,7 +38,7 @@
 </style>
 
 <body>
-@foreach($records as $key => $record)
+  @foreach($records as $key => $record)
   <table>
     <tr>
       <td colspan="2" style="text-align: center;">Barang Milik RSU ANANDA PURWOREJO</td>
@@ -51,12 +52,16 @@
       <td>{{$record->nama}}</td>
     </tr>
     <tr>
+      <th>Tempat : </th>
+      <td>{{$record->ruangan->nama}}</td>
+    </tr>
+    <tr>
       <th>Tanggal Pembelian : </th>
       <td>{{$record->tanggal_pembelian}}</td>
     </tr>
   </table>
   @if(!$loop->last)
-    <div class="page-break"></div>
+  <div class="page-break"></div>
   @endif
   @endforeach
 </body>

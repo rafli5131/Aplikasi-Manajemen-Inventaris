@@ -15,8 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\BarangResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BarangResource\RelationManagers;
-use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
-use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
+use App\Filament\Exports\BarangExporter;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class BarangResource extends Resource
 {
@@ -35,12 +36,12 @@ class BarangResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('kode')
-                ->label('Nomor Barang')
-                ->required()
-                ->maxLength(255),
+                    ->label('Nomor Barang')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('nama')
-                ->required()
-                ->maxLength(255),
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Select::make('kategori_id')
                     ->label('Kategori')
                     ->required()
@@ -92,7 +93,7 @@ class BarangResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('gambar')
-                ->searchable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('kode')
                     ->label('Nomor Barang')
                     ->searchable(),
@@ -114,7 +115,7 @@ class BarangResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('kondisi')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'Hilang' => 'gray',
                         'Perbaikan' => 'warning',
                         'Baik' => 'success',
@@ -132,15 +133,15 @@ class BarangResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('kategori_id')
-                    ->options(fn () => \App\Models\Kategori::pluck('nama', 'id')->toArray())
+                    ->options(fn() => \App\Models\Kategori::pluck('nama', 'id')->toArray())
                     ->label('Kategori'),
                 SelectFilter::make('ruangan_id')
-                    ->options(fn () => \App\Models\Ruangan::pluck('nama', 'id')->toArray())
+                    ->options(fn() => \App\Models\Ruangan::pluck('nama', 'id')->toArray())
                     ->label('Ruangan'),
                 SelectFilter::make("supplier_id")
-                    ->options(fn () => \App\Models\Supplier::pluck('nama', 'id')->toArray())
+                    ->options(fn() => \App\Models\Supplier::pluck('nama', 'id')->toArray())
                     ->label('Supplier'),
-                SelectFilter::make("konidisi")
+                SelectFilter::make("kondisi")
                     ->options([
                         'Baik' => 'Baik',
                         'Rusak' => 'Rusak',
@@ -150,7 +151,8 @@ class BarangResource extends Resource
 
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
+                ExportAction::make()
+                    ->exporter(BarangExporter::class)
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -159,11 +161,12 @@ class BarangResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    FilamentExportBulkAction::make('export'),
+                    ExportBulkAction::make()
+                        ->exporter(BarangExporter::class),
                     Tables\Actions\BulkAction::make('printLabel')
                         ->label('Print Label')
                         ->icon('heroicon-o-printer')
-                        ->action(function ( $records) {
+                        ->action(function ($records) {
                             // Implement the logic to print labels for the selected items
                             $pdf = Pdf::loadView('pdf', compact(['records']))->setPaper('a6', 'landscape');
                             return response()->streamDownload(function () use ($pdf) {

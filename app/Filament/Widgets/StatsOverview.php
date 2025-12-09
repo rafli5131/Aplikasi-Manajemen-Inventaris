@@ -11,13 +11,22 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Jumlah Barang', Barang::count())
+            Stat::make('Total Jenis Barang', Barang::count())
+                ->description('Jumlah jenis barang terdaftar')
+                ->descriptionIcon('heroicon-m-archive-box')
                 ->color('info'),
-            Stat::make('Total Barang Baik', Barang::select()->where('kondisi', 'Baik')->count())
+            Stat::make('Total Stok Barang', Barang::sum('jumlah'))
+                ->description('Total fisik seluruh barang')
+                ->descriptionIcon('heroicon-m-cube')
+                ->color('primary'),
+            Stat::make('Total Barang Baik', Barang::where('kondisi', 'Baik')->count())
+                ->description('Kondisi layak pakai')
+                ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
-            Stat::make('Total Barang Rusak', Barang::select()->where('kondisi', 'Rusak')->count())
+            Stat::make('Total Barang Rusak', Barang::where('kondisi', '!=', 'Baik')->count())
+                ->description('Rusak / Hilang / Perbaikan')
+                ->descriptionIcon('heroicon-m-exclamation-circle')
                 ->color('danger'),
-
         ];
     }
 }
