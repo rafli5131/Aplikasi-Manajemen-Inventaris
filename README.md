@@ -1,90 +1,57 @@
-# Aplikasi Management Inventaris
+# Inventory Management Application
 
-Aplikasi **Management Inventaris** adalah sebuah sistem berbasis web yang dirancang untuk membantu pengelolaan barang-barang inventaris dengan lebih efisien. Aplikasi ini memiliki fitur lengkap untuk mengatur barang, kategori, ruangan, pemasok, laporan, serta pemeliharaan barang. Aplikasi ini dibangun menggunakan framework [Laravel 10](https://laravel.com/) dan [Laravel Filament](https://filamentphp.com/) sebagai panel administrasi yang mudah digunakan.
+A web application for organizing inventory records, item categories, storage locations, suppliers, and maintenance activities. The application uses Laravel and Filament for its administrative interface.
 
-## Fitur Utama
+## Main features
 
-1. **Manajemen Barang**
-   - Menambahkan, memperbarui, menghapus, dan melihat informasi detail barang inventaris.
-   - Pengelolaan stok barang dan informasi terkait seperti kode barang, harga, dan kondisi.
+- Inventory records with stock, cost, condition, and item details.
+- Categories, rooms or locations, and supplier records.
+- Reporting and tracking for inventory and maintenance workflows.
+- Administrative interface built with Filament.
 
-2. **Manajemen Kategori**
-   - Mengelompokkan barang berdasarkan kategori tertentu untuk memudahkan pencarian dan pengelolaan.
-   
-3. **Manajemen Ruangan**
-   - Mengelola informasi tentang ruangan tempat penyimpanan barang inventaris, seperti nama ruangan dan lokasi.
+## Technology
 
-4. **Manajemen Pemasok**
-   - Mengatur data pemasok barang, termasuk informasi kontak dan transaksi pemasokan.
+PHP, Laravel, Filament, MySQL, Tailwind CSS, and Docker Compose for local development.
 
-5. **Laporan**
-   - Menyediakan laporan barang masuk, barang keluar, stok saat ini, serta laporan pengeluaran barang dalam format yang mudah dipahami.
+## Local installation
 
-6. **Maintenance Barang**
-   - Mencatat dan memonitor aktivitas pemeliharaan barang untuk menjaga kondisi barang inventaris tetap baik.
+```bash
+git clone https://github.com/rafli5131/Aplikasi-Manajemen-Inventaris.git
+cd Aplikasi-Manajemen-Inventaris
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-## Teknologi yang Digunakan
+Configure `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` in your local `.env`, then initialize the database:
 
-- **Laravel 10**: Framework PHP yang digunakan sebagai backend utama.
-- **Laravel Filament**: Digunakan untuk membangun panel administrasi yang interaktif dan mudah dikelola.
-- **MySQL**: Basis data yang digunakan untuk menyimpan semua informasi terkait inventaris.
-- **Tailwind CSS**: Framework CSS yang digunakan untuk styling frontend agar tampilan lebih modern dan responsif.
+```bash
+php artisan migrate --seed
+npm install
+npm run build
+php artisan serve
+```
 
-## Instalasi
+## Docker development
 
-Berikut langkah-langkah untuk menjalankan aplikasi ini di lingkungan lokal:
-
-1. Clone repository ini:
-   ```bash
-   git clone https://github.com/rafli5131/Aplikasi-Manajemen-Inventaris.git
-   cd Aplikasi-Manajemen-Inventaris```
-
-2. Copy file `.env.example` dan buat file `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-3. Set up database di `.env`:
-   ```
-   DB_DATABASE=nama_database
-   DB_USERNAME=username
-   DB_PASSWORD=password
-   ```
-4. Jalankan perintah instalasi:
-    ```bash
-    composer install
-    php artisan install```
-
-## Docker Development
-
-Langkah cepat untuk menjalankan aplikasi menggunakan Docker (development):
-
-1. Salin environment khusus Docker:
+An example Docker environment is included in the repository. Review the values in `.env.docker` and change any sample credentials before starting services.
 
 ```bash
 cp .env.docker .env
-```
-
-2. Jalankan docker-compose:
-
-```bash
 docker compose up -d --build
-```
-
-3. Setelah kontainer berjalan, jalankan perintah yang diperlukan dari dalam kontainer app:
-
-```bash
-# jalankan composer (hanya jika belum ada vendor)
 docker compose exec app composer install
-
-# generate app key
 docker compose exec app php artisan key:generate
-
-# jalankan migrasi (opsional, pastikan DB sudah siap)
 docker compose exec app php artisan migrate --seed
 ```
 
-4. Akses aplikasi di http://localhost:8080 dan Adminer (DB) di http://localhost:8081
+The application and database-management interfaces are documented in the Docker configuration. Do not expose development database tools or default credentials to the public internet.
 
-Catatan:
-- File aplikasi akan di-mount ke dalam kontainer sehingga perubahan kode langsung terlihat.
-- Jika butuh akses shell ke kontainer app: `docker compose exec app bash`.
+## Project layout
+
+- `app/`: models, application logic, and Filament resources.
+- `database/`: migrations, factories, and seeders.
+- `resources/`: frontend views and assets.
+- `routes/`: application routes.
+- `tests/`: test scaffolding.
+
+A [server upgrade tutorial](TUTORIAL_UPGRADE_SERVER.md) is also included. Validate its steps against your deployment environment before using it on a production system.
